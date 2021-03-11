@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title>Journal</title>
+<title>Labs</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -25,6 +25,27 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-2.0.3/leaflet.js"></script>
+<script src="site_libs/leaflet-providers-1.9.0/leaflet-providers_1.9.0.js"></script>
+<script src="site_libs/leaflet-providers-plugin-2.0.3/leaflet-providers-plugin.js"></script>
+<script src="site_libs/plot_sum-1/data_stars_plot_sumfbda2c.txt"></script>
+<script src="site_libs/joda-0.0.1/joda.js"></script>
+<script src="site_libs/joda-0.0.1/addImageQuery-bindings.js"></script>
+<script src="site_libs/clipboard-0.0.1/setClipboardText.js"></script>
+<link href="site_libs/HomeButton-0.0.1/home-button.css" rel="stylesheet" />
+<script src="site_libs/HomeButton-0.0.1/home-button.js"></script>
+<script src="site_libs/HomeButton-0.0.1/easy-button-src.min.js"></script>
+<link href="site_libs/mapviewCSS-0.0.1/mapview-popup.css" rel="stylesheet" />
+<link href="site_libs/mapviewCSS-0.0.1/mapview.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -72,9 +93,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -88,7 +107,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -98,6 +116,9 @@ img {
 }
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
@@ -113,7 +134,6 @@ body {
   padding-top: 56px;
   margin-top: -56px;
 }
-
 .section h2 {
   padding-top: 56px;
   margin-top: -56px;
@@ -133,6 +153,43 @@ body {
 .section h6 {
   padding-top: 56px;
   margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -154,47 +211,66 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -208,6 +284,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -243,8 +325,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -253,6 +333,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -299,122 +389,1536 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Journal</h1>
+<h1 class="title toc-ignore">Labs</h1>
 
 </div>
 
 
-<p>IMPORTANT: You can delete everything in here and start fresh. You might want to start by not deleting anything above this line until you know what that stuff is doing.</p>
-<p>This is an .Rmd file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a # in front of your text, it will create a top level-header.</p>
-<div id="my-first-post" class="section level1">
-<h1>My first post</h1>
-<p>2018 | 7 | 23 Last compiled: 2019-01-28</p>
-<p>Notice that whatever you define as a top level header, automatically gets put into the table of contents bar on the left.</p>
-<div id="second-level-header" class="section level2">
-<h2>Second level header</h2>
-<p>You can add more headers by adding more hashtags. These won’t be put into the table of contents</p>
-<div id="third-level-header" class="section level3">
-<h3>third level header</h3>
-<p>Here’s an even lower level header</p>
-</div>
-</div>
-</div>
-<div id="my-second-post-note-the-order" class="section level1">
-<h1>My second post (note the order)</h1>
-<p>2018 | 7 | 23 Last compiled: 2019-01-28</p>
-<p>I’m writing this tutorial going from the top down. And, this is how it will be printed. So, notice the second post is second in the list. If you want your most recent post to be at the top, then make a new post starting at the top. If you want the oldest first, do, then keep adding to the bottom</p>
-</div>
-<div id="adding-r-stuff" class="section level1">
-<h1>Adding R stuff</h1>
-<p>So far this is just a blog where you can write in plain text and serve your writing to a webpage. One of the main purposes of this lab journal is to record your progress learning R. The reason I am asking you to use this process is because you can both make a website, and a lab journal, and learn R all in R-studio. This makes everything really convenient and in the sam place.</p>
-<p>So, let’s say you are learning how to make a histogram in R. For example, maybe you want to sample 100 numbers from a normal distribution with mean = 0, and standard deviation =1, and then you want to plot a histogram. You can do this right here by using an r code block, like this:</p>
-<pre class="r"><code>samples &lt;- rnorm(100, mean=0, sd=1)
-hist(samples)</code></pre>
+<div id="covid-cases" class="section level1">
+<h1>Covid Cases</h1>
+<pre class="r"><code># Lab 2 Data
+library(tidyverse)
+library(knitr)
+library(readxl)
+library(zoo)
+library(dplyr)
+
+url = &#39;https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv&#39;
+
+covid = read_csv(url)
+
+pop = PopulationEstimates &lt;- read_excel(&quot;~/Downloads/PopulationEstimates.xls&quot;, 
+                                        skip = 2)
+ #Set up data by county/create a New Cases column
+data = covid %&gt;%
+  filter(state == &quot;California&quot;) %&gt;%
+  group_by(county) %&gt;%
+  mutate(newCases = cases - lag(cases)) %&gt;%
+  ungroup()
+
+today = data %&gt;% filter(date == max(date))
+
+
+# Calculate total California Cases for end analysis 
+sum(today$cases)</code></pre>
+<pre><code>## [1] 3607544</code></pre>
+<pre class="r"><code>sum(today$newCases)</code></pre>
+<pre><code>## [1] 4131</code></pre>
+<pre class="r"><code># Make Tables - Cumulative/New Cases
+most_new_cases = today %&gt;% 
+  slice_max(newCases, n = 5) %&gt;%
+  select(county, newCases)
+
+most_cumulative_cases = data %&gt;%
+  filter(date == max(date)) %&gt;%
+  slice_max(cases, n = 5) %&gt;%
+  select(county, cases)
+
+
+# Refine Tables - cumulative/new cases
+library(kableExtra)
+knitr::kable(most_new_cases,
+             caption = &quot;California Counties: Most New Cases&quot;, 
+             col.names = c(&quot;County&quot;, &quot;New Cases&quot;), 
+             format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14)</code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+California Counties: Most New Cases
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+County
+</th>
+<th style="text-align:right;">
+New Cases
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Los Angeles
+</td>
+<td style="text-align:right;">
+1,259
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Diego
+</td>
+<td style="text-align:right;">
+473
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Riverside
+</td>
+<td style="text-align:right;">
+452
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Joaquin
+</td>
+<td style="text-align:right;">
+262
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+146
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(most_cumulative_cases,
+             caption = &quot;California Counties: Most Cumulative Cases&quot;,
+             col.names = c(&quot;County&quot;, &quot;Cumulative Cases&quot;),
+             format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14)</code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+California Counties: Most Cumulative Cases
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+County
+</th>
+<th style="text-align:right;">
+Cumulative Cases
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Los Angeles
+</td>
+<td style="text-align:right;">
+1,205,924
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Riverside
+</td>
+<td style="text-align:right;">
+291,492
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Bernardino
+</td>
+<td style="text-align:right;">
+288,045
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Diego
+</td>
+<td style="text-align:right;">
+263,811
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+262,995
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Join population to covid data/filter to include only last 14 days 
+perCap = pop %&gt;%
+  select(fips = &quot;FIPStxt&quot;, state = &quot;State&quot;, pop2019 = &quot;POP_ESTIMATE_2019&quot;) %&gt;%
+  right_join(data, by = &quot;fips&quot;) %&gt;%
+  mutate(cumulative_cases_percapita = (cases/pop2019), new_cases_percapita = (newCases/pop2019)) %&gt;%
+  filter(date &gt;= max(date) - 13)
+
+
+# Make Percapita Tables
+cum_per_cap = perCap %&gt;%
+  filter(date == max(date)) %&gt;%
+  slice_max(cases, n = 5) %&gt;%
+  select(county, cumulative_cases_percapita)
+
+new_per_cap = perCap %&gt;%
+  filter(date == max(date)) %&gt;%
+  slice_max(cases, n = 5) %&gt;%
+  select(county, new_cases_percapita)
+
+# Refine Tables - Per Capita 
+
+knitr::kable(cum_per_cap,
+             caption = &quot;California Counties: Most Cumulative Cases Per Capita&quot;, 
+             col.names = c(&quot;County&quot;, &quot;Cumulative Cases Per Capita&quot;), 
+             format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14)</code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+California Counties: Most Cumulative Cases Per Capita
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+County
+</th>
+<th style="text-align:right;">
+Cumulative Cases Per Capita
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Los Angeles
+</td>
+<td style="text-align:right;">
+0.1201226
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Riverside
+</td>
+<td style="text-align:right;">
+0.1179869
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Bernardino
+</td>
+<td style="text-align:right;">
+0.1321256
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Diego
+</td>
+<td style="text-align:right;">
+0.0790248
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+0.0828150
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(new_per_cap,
+             caption = &quot;California Counties: Most New Cases Per Capita&quot;,
+             col.names = c(&quot;County&quot;, &quot;New Cases Per Capita&quot;),
+             format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14)</code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+California Counties: Most New Cases Per Capita
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+County
+</th>
+<th style="text-align:right;">
+New Cases Per Capita
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Los Angeles
+</td>
+<td style="text-align:right;">
+0.0001254
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Riverside
+</td>
+<td style="text-align:right;">
+0.0001830
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Bernardino
+</td>
+<td style="text-align:right;">
+0.0000005
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+San Diego
+</td>
+<td style="text-align:right;">
+0.0001417
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Orange
+</td>
+<td style="text-align:right;">
+0.0000460
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Calculate number of new cases in last 14 days per 100000 people/number of safe counties 
+safe = perCap %&gt;%
+  group_by(county, pop2019) %&gt;%
+  summarise(total_newCases = sum(newCases, na.rm = TRUE)) %&gt;% 
+  mutate(total_safecounties = total_newCases/(pop2019/100000)) %&gt;% 
+  filter(total_safecounties &lt; 100)
+
+
+# Facet plot 1
+data2 = covid %&gt;%
+  filter(state %in% c(&quot;New York&quot;,&quot;California&quot;, &quot;Louisiana&quot;, &quot;Florida&quot;)) %&gt;%
+  group_by(state, date) %&gt;%
+  summarize(cases = sum(cases)) %&gt;% 
+  ungroup() %&gt;% 
+  group_by(state) %&gt;% 
+  mutate(newCases = cases - lag(cases),
+         roll7 = zoo::rollmean(newCases, 7, fill = NA, align = &#39;right&#39;)) %&gt;%
+  ungroup() %&gt;%
+  filter(newCases &gt; 0)
+
+ggplot(data = data2, aes(x = date)) +
+  geom_col(aes(y = newCases), col = NA, fill = &quot;red&quot;) +
+  geom_line(aes(y = roll7), col = &quot;darkred&quot;, size = 1) +
+  ggthemes::theme_wsj() +
+  labs(title = paste(&quot;New Cases&quot;)) +
+  theme(plot.background = element_rect(fill = &quot;white&quot;),
+        panel.background = element_rect(fill = &quot;white&quot;),
+        plot.title = element_text(size = 14, face = &#39;bold&#39;)) +
+  facet_grid(~state, scales = &quot;free_y&quot;)</code></pre>
 <p><img src="Journal_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<p>When you knit this R Markdown document, you will see that the histogram is printed to the page, along with the R code. This document can be set up to hide the R code in the webpage, just delete the comment (hashtag), from the cold folding option in the yaml header up top. For purposes of letting yourself see the code, and me see the code, best to keep it the way that it is. You learn all of these things and more can be customized in each R code block.</p>
-</div>
-<div id="the-big-idea" class="section level1">
-<h1>The big idea</h1>
-<p>Use this lab journal to record what you do in R. This way I will be able to see what you are doing and help you along the way. You will also be creating a repository of all the things you do. You can make posts about everything. Learning specific things in R (project unrelated), and doing things for the project that we will discuss at the beginning of the Fall semester. You can get started now by fiddling around with googling things, and trying stuff out in R. I’ve placed some helpful starting links in the links page on this website</p>
-</div>
-<div id="what-can-you-do-right-now-by-yourself" class="section level1">
-<h1>What can you do right now by yourself?</h1>
-<p>It’s hard to learn programming when you don’t have specific problems that you are trying to solve. Everything just seems abstract.</p>
-<p>I wrote an <a href="https://crumplab.github.io/programmingforpsych/">introductory programming book that introduces R</a>, and gives some <a href="https://crumplab.github.io/programmingforpsych/programming-challenges-i-learning-the-fundamentals.html">concrete problems for you to solve</a>.</p>
-<p>To get the hang of journaling and solving the problems to learn programming, my suggestion is that you use this .Rmd file to solve the problems. It would look like this:</p>
-</div>
-<div id="problem-1" class="section level1">
-<h1>Problem 1</h1>
-<p>Do simple math with numbers, addition, subtraction, multiplication, division</p>
-<pre class="r"><code>1+2</code></pre>
-<pre><code>## [1] 3</code></pre>
-<pre class="r"><code>2*5</code></pre>
-<pre><code>## [1] 10</code></pre>
-<pre class="r"><code>5/3</code></pre>
-<pre><code>## [1] 1.666667</code></pre>
-<pre class="r"><code>(1+6+4)/5</code></pre>
-<pre><code>## [1] 2.2</code></pre>
+<pre class="r"><code>data3 = pop %&gt;%
+  select(pop2019 = &quot;POP_ESTIMATE_2019&quot;, areaname = &quot;Area_Name&quot;) %&gt;%
+  right_join(data2, by = c(&quot;areaname&quot; = &quot;state&quot;)) %&gt;%
+  mutate(cases_per_capita = (newCases/pop2019), roll7 = zoo::rollmean(cases_per_capita, 7, fill = NA, align = &#39;right&#39;)) %&gt;%
+  ungroup() %&gt;%
+  filter(cases_per_capita &gt; 0)
+
+ggplot(data = data3, aes(x = date)) +
+  geom_col(aes(y = cases_per_capita), col = NA, fill = &quot;lightblue&quot;) +
+  geom_line(aes(y = roll7), col = &quot;blue&quot;, size = 1) +
+  ggthemes::theme_wsj() +
+  labs(title = paste(&quot;New Cases Per Capita&quot;)) +
+  theme(plot.background = element_rect(fill = &quot;white&quot;),
+        panel.background = element_rect(fill = &quot;white&quot;),
+        plot.title = element_text(size = 14, face = &#39;bold&#39;)) +
+  facet_grid(~areaname, scales = &quot;free_y&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
 </div>
 <div id="problem-2" class="section level1">
 <h1>Problem 2</h1>
 <p>Put numbers into variables, do simple math on the variables</p>
-<pre class="r"><code>a&lt;-1
-b&lt;-2
-a+b</code></pre>
-<pre><code>## [1] 3</code></pre>
-<pre class="r"><code>d&lt;-c(1,2,3)
-e&lt;-c(5,6,7)
-d+e</code></pre>
-<pre><code>## [1]  6  8 10</code></pre>
-<pre class="r"><code>d*e</code></pre>
-<pre><code>## [1]  5 12 21</code></pre>
-<pre class="r"><code>d/e</code></pre>
-<pre><code>## [1] 0.2000000 0.3333333 0.4285714</code></pre>
+<pre class="r"><code>library(tidyverse)
+library(sf)
+library(units)
+
+# Data
+library(USAboundaries)
+
+library(rnaturalearth)
+
+# Visualization
+library(gghighlight)
+library(ggrepel)
+library(knitr)
+
+library(ggthemes) 
+
+# Question 1.1 -Define a Projection 
+eqdc = &#39;+proj=eqdc +lat_0=40 +lon_0=-96 +lat_1=20 +lat_2=60 +x_0=0 +y_0=0 +datum=NAD83 +units=m +no_defs&#39;
+
+
+# Question 1.2 - Get USA state boundaries 
+data = USAboundaries::us_states(resolution = &quot;low&quot;) %&gt;%
+  filter(!state_name %in% c(&quot;Puerto Rico&quot;, &quot;Alaska&quot;, &quot;Hawaii&quot;)) %&gt;%
+  st_transform(eqdc)
+
+# Question 1.3 
+country = rnaturalearth::countries110
+
+country_sf = st_as_sf(country) %&gt;%
+  filter(admin %in% c(&quot;United States of America&quot;, &quot;Mexico&quot;, &quot;Canada&quot;)) %&gt;%
+  st_transform(eqdc)
+
+# Question 1.4- City locations
+
+cities = readr::read_csv(&#39;~/Documents/github/exercise-04/data/uscities.csv&#39;)
+
+cities_sf = data.frame(y = c(-121.7608, -119.7202), x = c(34.4285, 37.6861))
+cities_sf = st_as_sf(cities, coords = c(&quot;lng&quot;, &quot;lat&quot;), crs = 4326) %&gt;%
+  filter(!state_name %in% c(&quot;Puerto Rico&quot;, &quot;Alaska&quot;, &quot;Hawaii&quot;))
+
+cities_eqdc = st_transform(cities_sf, eqdc) %&gt;% 
+  select(city, state_name, population)
+
+
+# Union and Combine States
+usa_geom2 = data$geometry
+
+ca_u_ml = st_union(usa_geom2)  %&gt;%
+  st_cast(&quot;MULTILINESTRING&quot;)
+
+ca_c_ml = st_combine(usa_geom2)  %&gt;%
+  st_cast(&quot;MULTILINESTRING&quot;)
+
+
+# Distance to US Border
+cities_eqdc = cities_eqdc %&gt;%
+  mutate(dist_border = st_distance(cities_eqdc, ca_u_ml)) %&gt;%
+  mutate(dist_border = units::set_units(dist_border, &quot;km&quot;))
+# Distance to state borders
+cities_eqdc = cities_eqdc %&gt;%
+  mutate(dist_state = st_distance(cities_eqdc, ca_c_ml)) %&gt;%
+  mutate(dist_state = units::set_units(dist_state, &quot;km&quot;))
+# Distance to Canada
+cities_eqdc = cities_eqdc %&gt;%
+  mutate(dist_Canada = st_distance(cities_eqdc, filter(country_sf, admin == &quot;Canada&quot;))) %&gt;%
+  mutate(dist_Canada = units::set_units(dist_Canada, &quot;km&quot;))
+# Distance to Mexico
+cities_eqdc = cities_eqdc %&gt;%
+  mutate(dist_Mexico = st_distance(cities_eqdc, filter(country_sf, admin == &quot;Mexico&quot;))) %&gt;%
+  mutate(dist_Mexico = units::set_units(dist_Mexico, &quot;km&quot;))
+
+
+# Distances:
+# Cities to US Border 
+cities_eqdc %&gt;% select(city,state_name, dist_border) %&gt;% slice_max(dist_border, n = 5) %&gt;% 
+  st_drop_geometry() %&gt;% 
+  knitr::kable(caption = &quot;Cities Farthest from US Border&quot;,
+               col.names = c(&quot;City&quot;, &quot;State&quot;, &quot;Distance to US Border&quot;),
+               format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14)</code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Cities Farthest from US Border
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+City
+</th>
+<th style="text-align:left;">
+State
+</th>
+<th style="text-align:right;">
+Distance to US Border
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Dresden
+</td>
+<td style="text-align:left;">
+Kansas
+</td>
+<td style="text-align:right;">
+1,012.317 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Herndon
+</td>
+<td style="text-align:left;">
+Kansas
+</td>
+<td style="text-align:right;">
+1,007.750 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hill City
+</td>
+<td style="text-align:left;">
+Kansas
+</td>
+<td style="text-align:right;">
+1,005.147 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Atwood
+</td>
+<td style="text-align:left;">
+Kansas
+</td>
+<td style="text-align:right;">
+1,004.734 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Jennings
+</td>
+<td style="text-align:left;">
+Kansas
+</td>
+<td style="text-align:right;">
+1,003.646 [km]
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Cities to states
+cities_eqdc %&gt;% select(city,state_name, dist_state) %&gt;% slice_max(dist_state, n = 5) %&gt;% 
+  st_drop_geometry() %&gt;% 
+  knitr::kable(caption = &quot;Cities Farthest from State Boundaries&quot;,
+               col.names = c(&quot;City&quot;, &quot;State&quot;, &quot;Distance to State Boundary&quot;),
+               format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14)</code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Cities Farthest from State Boundaries
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+City
+</th>
+<th style="text-align:left;">
+State
+</th>
+<th style="text-align:right;">
+Distance to State Boundary
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Lampasas
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+308.9216 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Bertram
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+302.8190 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Kempner
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+302.5912 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Harker Heights
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+298.8125 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Florence
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+298.6804 [km]
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Distance to Mexico
+cities_eqdc %&gt;% select(city,state_name, dist_Mexico) %&gt;% slice_max(dist_Mexico, n = 5) %&gt;% 
+  st_drop_geometry() %&gt;% 
+  knitr::kable(caption = &quot;Cities Farthest from Mexican Border&quot;,
+               col.names = c(&quot;City&quot;, &quot;State&quot;, &quot;Distance to Mexican Border&quot;),
+               format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14) </code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Cities Farthest from Mexican Border
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+City
+</th>
+<th style="text-align:left;">
+State
+</th>
+<th style="text-align:right;">
+Distance to Mexican Border
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Caribou
+</td>
+<td style="text-align:left;">
+Maine
+</td>
+<td style="text-align:right;">
+3,250.334 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Presque Isle
+</td>
+<td style="text-align:left;">
+Maine
+</td>
+<td style="text-align:right;">
+3,234.570 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Calais
+</td>
+<td style="text-align:left;">
+Maine
+</td>
+<td style="text-align:right;">
+3,134.348 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Eastport
+</td>
+<td style="text-align:left;">
+Maine
+</td>
+<td style="text-align:right;">
+3,125.624 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Old Town
+</td>
+<td style="text-align:left;">
+Maine
+</td>
+<td style="text-align:right;">
+3,048.366 [km]
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Distance to Canada
+cities_eqdc %&gt;% select(city,state_name, dist_Canada) %&gt;% slice_max(dist_Canada, n = 5) %&gt;% 
+  st_drop_geometry() %&gt;% 
+  knitr::kable(caption = &quot;Cities Farthest from Canadian Border&quot;,
+               col.names = c(&quot;City&quot;, &quot;State&quot;, &quot;Distance to Canadian Border&quot;),
+               format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14) </code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Cities Farthest from Canadian Border
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+City
+</th>
+<th style="text-align:left;">
+State
+</th>
+<th style="text-align:right;">
+Distance to Canadian Border
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Guadalupe Guerra
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+2,206.455 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sandoval
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+2,205.641 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fronton
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+2,204.784 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Fronton Ranchettes
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+2,202.118 [km]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Evergreen
+</td>
+<td style="text-align:left;">
+Texas
+</td>
+<td style="text-align:right;">
+2,202.020 [km]
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># 3.1 - 10 Largest Cities
+
+big_cities2 = cities_eqdc %&gt;%
+  slice_max(population, n = 10)
+
+ggplot() +
+  geom_sf(data = country_sf) +
+  geom_sf(data = data, lty = &quot;dashed&quot;, size = .5) +
+  geom_sf(data = big_cities2, size = 1) +
+  ggrepel::geom_label_repel(
+    data = big_cities2,
+    aes(label = city, geometry = geometry),
+    stat = &quot;sf_coordinates&quot;,
+    size = 2) +
+  labs(title = &quot;Most Populous US Cities&quot;,
+       x = &quot; &quot;,
+       y = &quot; &quot;) +
+  theme_economist()</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code># 3.2- City Distance to Border 
+farthest_cities = cities_eqdc %&gt;%
+  slice_max(dist_border, n = 5)
+
+ggplot() +
+  geom_sf(data = data) +
+  geom_sf(data = cities_eqdc, aes(col = as.numeric(dist_border)), size = 0.1) +
+  geom_sf(data = farthest_cities, size = 0.5, color = &quot;red&quot;) +
+  scale_color_gradient(low = &quot;gray&quot;, high = &quot;blue&quot;, name = &quot;Distance (km)&quot;) +
+  ggrepel::geom_label_repel(
+    data = farthest_cities,
+    aes(label = city, geometry = geometry),
+    stat = &quot;sf_coordinates&quot;,
+    size = 2) +
+  labs(title = &quot;City Distance from National Border &amp; Farthest Cities&quot;,
+       x = &quot; &quot;,
+       y = &quot; &quot;) + 
+  theme_economist() </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
+<pre class="r"><code># 3.3 - City Distance from Nearest State 
+farthest_cities_state = cities_eqdc %&gt;%
+  slice_max(dist_state, n = 5)
+
+ggplot() +
+  geom_sf(data = data) +
+  geom_sf(data = farthest_cities_state, size = 1, color = &quot;red&quot;) +
+  geom_sf(data = cities_eqdc, aes(col = as.numeric(dist_state)), size = 0.1) +
+  scale_color_gradient(low = &quot;gray&quot;, high = &quot;blue&quot;, name = &quot;Distance (km)&quot;) +
+  ggrepel::geom_label_repel(
+    data = farthest_cities_state,
+    aes(label = city, geometry = geometry),
+    stat = &quot;sf_coordinates&quot;,
+    size = 2) +
+  labs(title = &quot;City Distance from Nearest State Border &amp; Farthest Cities&quot;,
+       x = &quot; &quot;,
+       y = &quot; &quot;) + 
+  theme_economist() </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-2-3.png" width="672" /></p>
+<pre class="r"><code># 3.4- Equidistance Boundary from Mexico and Canada 
+
+cities_eqdc = cities_eqdc %&gt;%
+  mutate(difference = abs(dist_Canada - dist_Mexico)) 
+
+
+big_cities3 = cities_eqdc %&gt;%
+  filter(as.numeric(difference) &lt; 100 ) %&gt;%
+  slice_max(population, n = 5)
+
+ggplot() +
+  geom_sf(data = data) +
+  geom_sf(data = cities_eqdc, aes(col = as.numeric(difference)), size = 0.1) + 
+  gghighlight::gghighlight(as.numeric(difference) &lt; 100) +
+  geom_sf(data = big_cities3, size = 0.5, color = &quot;red&quot;) +
+  scale_color_gradient(low = &quot;gray&quot;, high = &quot;blue&quot;, name = &quot;Distance (km)&quot;) +
+  ggrepel::geom_label_repel(
+    data = big_cities3,
+    aes(label = city, geometry = geometry),
+    stat = &quot;sf_coordinates&quot;,
+    size = 2) +
+  labs(title = &quot;Cities Equidistant from Canadian and Mexican Borders (Within 100 km)&quot;,
+       subtitle = &quot;And Most Populous Cities&quot;,
+       x = &quot; &quot;,
+       y = &quot; &quot;) + 
+  theme_economist() </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-2-4.png" width="672" /></p>
+<pre class="r"><code># 4.1 - Quantifying Border Zone 
+total_pop = cities_eqdc %&gt;%
+  select(population) %&gt;%
+  summarise(sum(population))
+
+danger_zone = cities_eqdc %&gt;%
+  mutate(total_pop = sum(population)) %&gt;%
+  filter(as.numeric(dist_border) &lt;= 160) %&gt;%
+  summarise(number_cities = n(), sum_pop = sum(population), percent = 100 * (sum_pop/total_pop[1])) %&gt;%
+  st_drop_geometry() 
+
+knitr::kable(danger_zone, caption = &quot;Cities Within 100 Miles of State Border&quot;,
+             col.names = c(&quot;Number of Cities&quot;, &quot;Number of People&quot;, &quot;Percent of Population&quot;),
+             format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14) </code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Cities Within 100 Miles of State Border
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+Number of Cities
+</th>
+<th style="text-align:right;">
+Number of People
+</th>
+<th style="text-align:right;">
+Percent of Population
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+12,283
+</td>
+<td style="text-align:right;">
+259,935,815
+</td>
+<td style="text-align:right;">
+65.43979
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># 4.2 - Mapping Border Zone 
+highest_pop_dangerzone = cities_eqdc %&gt;%
+  filter(as.numeric(dist_border) &lt;= 160) %&gt;%
+  select(city, population) %&gt;%
+  slice_max(population, n = 10)
+
+ggplot() +
+  geom_sf(data = data) +
+  geom_sf(data = cities_eqdc, aes(col = as.numeric(dist_border)), size = 0.1) +
+  gghighlight::gghighlight(as.numeric(cities_eqdc$dist_border) &lt;= 160) +
+  scale_color_gradient(low = &quot;orange&quot;, high = &quot;dark red&quot;, name = &quot;Distance (km)&quot;) +
+  geom_sf(data = highest_pop_dangerzone, size = 1) +
+  ggrepel::geom_label_repel(
+    data = highest_pop_dangerzone,
+    aes(label = city, geometry = geometry),
+    stat = &quot;sf_coordinates&quot;,
+    size = 2) +
+  labs(title = &quot;Cities in 100 Mile Zone &amp; Most Populous Cities&quot;,
+       x = &quot; &quot;,
+       y = &quot; &quot;) + 
+  theme_economist() </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-2-5.png" width="672" /></p>
+<pre class="r"><code>######################
+##Extra Credit
+highest_pop_state = cities_eqdc %&gt;%
+  filter(as.numeric(dist_border) &lt;= 160) %&gt;%
+  select(city, state_name, population) %&gt;%
+  group_by(state_name) %&gt;%
+  filter(population == max(population))
+
+ggplot() +
+  geom_sf(data = data) +
+  geom_sf(data = cities_eqdc, aes(col = as.numeric(dist_border)), size = 0.1) +
+  gghighlight::gghighlight(as.numeric(cities_eqdc$dist_border) &lt;= 160) +
+  scale_color_gradient(low = &quot;orange&quot;, high = &quot;dark red&quot;, name = &quot;Distance (km)&quot;) +
+  geom_sf(data = highest_pop_state, size = 1) +
+  ggrepel::geom_label_repel(
+    data = highest_pop_state,
+    aes(label = city, geometry = geometry),
+    stat = &quot;sf_coordinates&quot;,
+    size = 2) +
+  labs(title = &quot;Cities in 100 Mile Zone &amp; Most Populous City Per State&quot;,
+       x = &quot; &quot;,
+       y = &quot; &quot;) + 
+  theme_economist() </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-2-6.png" width="672" /></p>
 </div>
 <div id="problem-3" class="section level1">
 <h1>Problem 3</h1>
 <p>Write code that will place the numbers 1 to 100 separately into a variable using for loop. Then, again using the seq function.</p>
-<pre class="r"><code># for loop solution
-# i becomes the number 1 to 100 at each step of the loop
+<pre class="r"><code>library(tidyverse)
+library(sf)
+library(USAboundaries)
+library(rmapshaper)
+library(readxl)
+library(gghighlight)
+library(leaflet)
+library(leafpop)
 
 
-a &lt;- length(100) # make empty variable, set length to 100
-for (i in 1:100){
-  a[i] &lt;-i #assigns the number in i, to the ith index of a
+# Step 1.1 - Get CONUS &amp; Simplify 
+conus = USAboundaries::us_counties() %&gt;%
+  filter(!state_name %in% c(&quot;Puerto Rico&quot;, &quot;Alaska&quot;, &quot;Hawaii&quot;)) %&gt;%
+  st_transform(5070)
+
+conus_simp = ms_simplify(conus, keep = 0.05)
+
+conuspts = mapview::npts(conus)
+simppts = mapview::npts(conus_simp)
+diff = conuspts - simppts
+
+
+
+# Step 1.2 - Centroids 
+
+county_centroid = st_centroid(conus_simp) %&gt;%
+  st_combine() %&gt;%
+  st_cast(&quot;MULTIPOINT&quot;)
+
+# Step 1.3 - 1.5: Make Tessalations 
+
+# Voroni Tessellation 
+v_grid = st_voronoi(county_centroid) %&gt;%
+  st_cast() %&gt;%
+  st_as_sf %&gt;%
+  mutate(id = 1:n())
+
+
+# Triangulated Tessalation
+t_grid = st_triangulate(county_centroid) %&gt;%
+  st_cast() %&gt;%
+  st_as_sf() %&gt;%
+  mutate(id = 1:n())
+
+
+# Gridded Coverage: n = 70
+sq_grid = st_make_grid(conus_simp, n = 70) %&gt;%
+  st_as_sf() %&gt;%
+  mutate(id = 1:n())
+
+
+# Hexagonal Coverage: n = 70
+hex_grid = st_make_grid(conus_simp, n = 70, square = FALSE) %&gt;%
+  st_as_sf() %&gt;%
+  mutate(id = 1:n())
+
+
+# 1.6 - Plot
+
+plot_tess = function(data, title)
+{ggplot() + 
+    geom_sf(data = data, fill = &quot;white&quot;, col = &quot;navy&quot;, size = .2) +   
+    theme_void() +
+    labs(title = title, caption = paste(&quot;This tesselation has:&quot;, nrow(data), &quot;tiles&quot; )) +
+    theme(plot.title = element_text(hjust = .5, color =  &quot;black&quot;, face = &quot;bold&quot;))}
+
+# Original
+plot_tess(data = conus_simp, &quot;Original County Data&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code># Voroni
+v_grid = st_intersection(v_grid, st_union(conus_simp))
+plot_tess(v_grid, &quot;Voronoi Coverage&quot;) +
+  geom_sf(data = county_centroid, col = &quot;lightgreen&quot;, size = 0.1)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-2.png" width="672" /></p>
+<pre class="r"><code># Triangulated
+
+t_grid = st_intersection(t_grid, st_union(conus_simp))
+plot_tess(t_grid, &quot;Triangulated Coverage&quot;) +
+  geom_sf(data = county_centroid, col = &quot;lightgreen&quot;, size = 0.1)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-3.png" width="672" /></p>
+<pre class="r"><code># Gridded
+
+plot_tess(sq_grid, &quot;Square Coverage&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-4.png" width="672" /></p>
+<pre class="r"><code># Hexagonal
+
+plot_tess(hex_grid, &quot;Hexagonal Coverage&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-5.png" width="672" /></p>
+<pre class="r"><code># Question 2 - Still need to comment on features
+tess_summary = function(sf_object, character_string){
+  area = st_area(sf_object, na.rm = FALSE, weights = FALSE) %&gt;%
+    units::set_units(&quot;km2&quot;) %&gt;%
+    units::drop_units() 
+  data.frame(type = character_string,
+             features = nrow(sf_object),
+             mean_area = mean(area),
+             standard_deviation = sd(area),
+             total_area = sum(area))
+} 
+
+table_summary = bind_rows(
+  tess_summary(conus_simp, &quot;Original&quot;),
+  tess_summary(v_grid, &quot;Voroni&quot;),
+  tess_summary(t_grid, &quot;Triangulation&quot;),
+  tess_summary(sq_grid, &quot;Gridded&quot;),
+  tess_summary(hex_grid, &quot;Hexagons&quot;))
+
+knitr::kable(table_summary,
+             caption = &quot;Tesselation Characteristics&quot;, 
+             col.names = c(&quot;Type&quot;, &quot;Number of Features&quot;, &quot;Mean Area&quot;, &quot;Standard Deviation (km^2)&quot;,&quot;Total Area (km^2)&quot;), 
+             format.args = list(big.mark = &quot;,&quot;)) %&gt;%
+  kableExtra::kable_styling(&quot;striped&quot;, full_width = TRUE, font_size = 14)</code></pre>
+<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
+<caption style="font-size: initial !important;">
+Tesselation Characteristics
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+Type
+</th>
+<th style="text-align:right;">
+Number of Features
+</th>
+<th style="text-align:right;">
+Mean Area
+</th>
+<th style="text-align:right;">
+Standard Deviation (km^2)
+</th>
+<th style="text-align:right;">
+Total Area (km^2)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Original
+</td>
+<td style="text-align:right;">
+3,075
+</td>
+<td style="text-align:right;">
+2,543.986
+</td>
+<td style="text-align:right;">
+3,428.208
+</td>
+<td style="text-align:right;">
+7,822,757
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Voroni
+</td>
+<td style="text-align:right;">
+3,075
+</td>
+<td style="text-align:right;">
+2,543.986
+</td>
+<td style="text-align:right;">
+2,894.392
+</td>
+<td style="text-align:right;">
+7,822,757
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Triangulation
+</td>
+<td style="text-align:right;">
+6,130
+</td>
+<td style="text-align:right;">
+1,262.674
+</td>
+<td style="text-align:right;">
+1,583.260
+</td>
+<td style="text-align:right;">
+7,740,190
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Gridded
+</td>
+<td style="text-align:right;">
+3,126
+</td>
+<td style="text-align:right;">
+2,687.981
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+8,402,629
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Hexagons
+</td>
+<td style="text-align:right;">
+2,250
+</td>
+<td style="text-align:right;">
+3,763.052
+</td>
+<td style="text-align:right;">
+0.000
+</td>
+<td style="text-align:right;">
+8,466,867
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Question 3
+
+library(readxl)
+NID2019 =read_excel(&quot;~/Downloads/NID2019_U.xlsx&quot;)
+
+
+dams_sf = NID2019 %&gt;%
+  filter(!is.na(LONGITUDE), !is.na(LATITUDE)) %&gt;%
+  st_as_sf(coords = c(&#39;LONGITUDE&#39;, &#39;LATITUDE&#39;), crs = 4326) %&gt;%
+  st_transform(5070)
+
+
+point_in_polygon = function(points, polygon, id){
+  st_join(polygon, points) %&gt;%
+    st_drop_geometry() %&gt;%
+    count(.data[[id]]) %&gt;%
+    setNames(c(id, &quot;n&quot;)) %&gt;%
+    left_join(polygon, by = id) %&gt;%
+    st_as_sf()
 }
 
-print(a)</code></pre>
-<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17
-##  [18]  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34
-##  [35]  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51
-##  [52]  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68
-##  [69]  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85
-##  [86]  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100</code></pre>
-<pre class="r"><code># for loop solution #2
+orig_pip = point_in_polygon(dams_sf, conus_simp, &quot;geoid&quot;)
 
-a&lt;-c() #create empty variable using combine command
-for (i in 1:100){
-  a&lt;-c(a,i) # keeps combining a with itself and the new number in i
-}
-print(a)</code></pre>
-<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17
-##  [18]  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34
-##  [35]  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51
-##  [52]  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68
-##  [69]  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85
-##  [86]  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100</code></pre>
-<pre class="r"><code># seq solution
-a &lt;- seq(1,100,1) # look up help for seq using ?seq() in console
-print(a)</code></pre>
-<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17
-##  [18]  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34
-##  [35]  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51
-##  [52]  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68
-##  [69]  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85
-##  [86]  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100</code></pre>
-</div>
-<div id="replace-this-with-problem-4" class="section level1">
-<h1>Replace this with problem 4</h1>
+# Voroni
+voroni_pip = point_in_polygon(dams_sf, v_grid, &quot;id&quot;)
+
+# Triangulation
+tri_pip = point_in_polygon(dams_sf, t_grid, &quot;id&quot;)
+
+# Grid
+grid_pip = point_in_polygon(dams_sf, sq_grid, &quot;id&quot;)
+
+# Hexagon Grid
+hex_pip = point_in_polygon(dams_sf, hex_grid, &quot;id&quot;)
+
+# Plot Function 
+
+plot_tess_pip = function(sf_tess_object, title)
+{ggplot() + 
+    geom_sf(data = sf_tess_object, aes(fill = n), col = NA) +
+    scale_fill_viridis_c(name = &quot; &quot;) + 
+    theme_void() + 
+    theme(plot.title = element_text(face = &quot;bold&quot;, color = &quot;black&quot;, hjust = .5, size = 24)) +
+    labs(title = paste(&quot;Dam Locations:&quot;, title),
+         caption = paste0(sum(sf_tess_object$n), &quot; Dam Locations Represented&quot;))}
+# Plot
+plot_tess_pip(orig_pip, &quot;Original&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-6.png" width="672" /></p>
+<pre class="r"><code>plot_tess_pip(voroni_pip, &quot;Voroni&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-7.png" width="672" /></p>
+<pre class="r"><code>plot_tess_pip(tri_pip, &quot;Triangulation&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-8.png" width="672" /></p>
+<pre class="r"><code>plot_tess_pip(grid_pip, &quot;Square Grid&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-9.png" width="672" /></p>
+<pre class="r"><code>plot_tess_pip(hex_pip, &quot;Hexagon Grid&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-10.png" width="672" /></p>
+<pre class="r"><code># Flood Control Dams
+flood_control =  dams_sf %&gt;%
+  filter(grepl(&quot;C&quot;, PURPOSES)) 
+
+flood_pip = point_in_polygon(flood_control, v_grid, &quot;id&quot;)
+
+# Fire Protection Dams
+fire_control =  dams_sf %&gt;%
+  filter(grepl(&quot;P&quot;, PURPOSES)) 
+
+fire_pip = point_in_polygon(fire_control, v_grid, &quot;id&quot;)
+
+# Water Supply
+
+water_supply =  dams_sf %&gt;%
+  filter(grepl(&quot;S&quot;, PURPOSES))
+
+water_pip = point_in_polygon(water_supply, v_grid, &quot;id&quot;)
+
+# Fish and Wildlife
+
+fish_wildlife =  dams_sf %&gt;%
+  filter(grepl(&quot;F&quot;, PURPOSES))
+
+fish_wildlife_pip = point_in_polygon(fish_wildlife, v_grid, &quot;id&quot;)
+
+# Plots
+
+# Flood Control 
+plot_tess_pip(flood_pip, &quot;Flood Control&quot;) +
+  gghighlight::gghighlight(n &gt; mean(n) + 1) </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-11.png" width="672" /></p>
+<pre class="r"><code>plot_tess_pip(fire_pip, &quot;Fire Control&quot;) +
+  gghighlight::gghighlight(n &gt; mean(n) + 1) </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-12.png" width="672" /></p>
+<pre class="r"><code>plot_tess_pip(water_pip, &quot;Water Supply&quot;) +
+  gghighlight::gghighlight(n &gt; mean(n) + 1) </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-13.png" width="672" /></p>
+<pre class="r"><code># Fish and Wildlife
+plot_tess_pip(fish_wildlife_pip, &quot;Fish and Wildlife&quot;) +
+  gghighlight::gghighlight(n &gt; mean(n) + 1) </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-14.png" width="672" /></p>
+<pre class="r"><code>library(readr)
+library(dplyr)
+library(raster) 
+library(tidyverse) 
+library(getlandsat) 
+library(sf)
+library(mapview) 
+library(whitebox)
+library(USAboundaries)
+library(kableExtra)
+
+################
+PaloBoundary = read_csv(&quot;~/Documents/github/176A-Lab01/data/uscities.csv&quot;) %&gt;%
+  filter(city == &quot;Palo&quot;) %&gt;%
+  st_as_sf(coords = c(&quot;lng&quot;, &quot;lat&quot;), crs = 4326) %&gt;%
+  st_transform(5070) %&gt;%
+  st_buffer(10000) %&gt;%
+  st_bbox() %&gt;%
+  st_as_sfc() %&gt;%
+  st_as_sf()
+
+bb = read_csv(&quot;~/Documents/github/176A-Lab01/data/uscities.csv&quot;) %&gt;%
+  filter(city == &quot;Palo&quot;) %&gt;%
+  st_as_sf(coords = c(&quot;lng&quot;, &quot;lat&quot;), crs = 4326) %&gt;%
+  st_transform(5070) %&gt;%
+  st_buffer(5000) %&gt;%
+  st_bbox() %&gt;%
+  st_as_sfc() %&gt;%
+  st_as_sf()
+
+
+bbwgs = PaloBoundary %&gt;%
+  st_transform(4326)
+PaloBoundaryWgs = st_bbox(bbwgs)
+meta = read_csv(&quot;~/Documents/github/176A-Lab01/data/palofloodscene.csv&quot;)
+
+
+
+
+  
+  
+  
+  
+  
+  
+  files = lsat_scene_files(&quot;https://s3-us-west-2.amazonaws.com/landsat-pds/L8/025/031/LC80250312016270LGN00/index.html&quot;) %&gt;% 
+    filter(grepl(paste0(&quot;B&quot;, 1:6, &quot;.TIF$&quot;, collapse = &quot;|&quot;), file))  %&gt;% 
+    arrange(file) %&gt;% 
+    pull(file)
+  
+  st = sapply(files, lsat_image)
+  s = stack(st) %&gt;% 
+    setNames(c(paste0(&quot;band&quot;, 1:6)))  
+
+  
+  cropper = bbwgs %&gt;% 
+    st_transform(crs(s))
+  r = crop(s, cropper)
+  dim(r)  </code></pre>
+<pre><code>## [1] 682 691   6</code></pre>
+<pre class="r"><code>  par(mfrow = c(2,1))
+  plotRGB(r, r = 4, g = 3, b = 2, stretch = &quot;lin&quot;)
+  plotRGB(r, r = 4, g = 3, b = 2, stretch = &quot;hist&quot;)  </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>  plotRGB(r, r = 5, g = 5, b = 3, stretch = &quot;lin&quot;)
+  plotRGB(r, r = 5, g = 5, b = 3, stretch = &quot;hist&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<pre class="r"><code>  plotRGB(r, r = 5, g = 6, b = 4, stretch = &quot;lin&quot;)
+  plotRGB(r, r = 5, g = 6, b = 4, stretch = &quot;hist&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-3.png" width="672" /></p>
+<pre class="r"><code>  plotRGB(r, r = 5, g = 3, b = 2, stretch = &quot;lin&quot;)
+  plotRGB(r, r = 5, g = 3, b = 2, stretch = &quot;hist&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-4.png" width="672" /></p>
+<pre class="r"><code>  #4.1
+  
+  palette = colorRampPalette(c(&quot;blue&quot;, &quot;white&quot;, &quot;red&quot;))
+  
+  
+  ndvi = (r$band5 - r$band4) / (r$band5 + r$band4)
+  plot(ndvi, col = palette(256))  
+  
+  ndwi = (r$band3 - r$band5) / (r$band3 + r$band5)
+  plot(ndwi, col = palette(256))</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-5.png" width="672" /></p>
+<pre class="r"><code>  mndwi = (r$band3 - r$band6) / (r$band3 + r$band6)
+  plot(mndwi, col = palette(256))
+
+  
+  wri = (r$band3 + r$band4) / (r$band5 + r$band6)
+  plot(wri, col = palette(256))  </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-6.png" width="672" /></p>
+<pre class="r"><code>  swi = (1 / sqrt(r$band2 - r$band6))
+  plot(swi, col = palette(256))
+  
+  stack_indices = raster::stack(ndvi, ndwi, mndwi, wri, swi) %&gt;% 
+    setNames(c(&quot;NDVI&quot;, &quot;NDWI&quot;, &quot;MNDWI&quot;, &quot;WRI&quot;, &quot;SWI&quot;))
+  plot(stack_indices)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-7.png" width="672" /><img src="Journal_files/figure-html/unnamed-chunk-4-8.png" width="672" /></p>
+<pre class="r"><code>  #4.2 
+  thresholding1 = function(x){ifelse(x &lt;= 0,1,NA)}
+  thresholding2 = function(x){ifelse(x &gt;= 0,1,NA)}
+  thresholding3 = function(x){ifelse(x &gt;= 0,1,NA)}
+  thresholding4 = function(x){ifelse(x &gt;= 1, 1,NA)}
+  thresholding5 = function(x){ifelse(x &lt;= 5,1,NA)}
+  
+  flood1 = calc(ndvi, thresholding1)
+  plot(flood1, col = &quot;blue&quot;)
+
+  
+  flood2 = calc(ndwi, thresholding2)
+  plot(flood2, col = &quot;blue&quot;)  </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-9.png" width="672" /></p>
+<pre class="r"><code>  flood3 = calc(mndwi, thresholding3)
+  plot(flood3, col = &quot;blue&quot;)
+  
+  flood4 = calc(wri, thresholding4)
+  plot(flood4, col = &quot;blue&quot;)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-10.png" width="672" /></p>
+<pre class="r"><code>  flood5 = calc(swi, thresholding5)
+  plot(flood5, col = &quot;blue&quot;)  
+  
+  floods = raster::stack(flood1, flood2, flood3, flood4, flood5) %&gt;% 
+    setNames(c(&quot;ndvi&quot;, &quot;ndwi&quot;, &quot;mndwi&quot;, &quot;wri&quot;, &quot;swi&quot;))
+  
+
+  plot(floods, col = blues9)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-11.png" width="672" /><img src="Journal_files/figure-html/unnamed-chunk-4-12.png" width="672" /></p>
+<pre class="r"><code>  #5.1
+ 
+  set.seed(09062020)
+  
+  #5.2 
+  r_values = getValues(r) %&gt;% 
+    na.omit()
+  
+ 
+  k_12 = kmeans(r_values, 12)
+  k_6 = kmeans(r_values, 6)
+  k_4 = kmeans(r_values, 4)
+  
+  
+  kmeans_raster = stack_indices$NDVI
+  kmeans_raster6 = stack_indices$NDVI
+  kmeans_raster4 = stack_indices$NDVI
+  
+  
+  values(kmeans_raster) = k_12$cluster
+  values(kmeans_raster6) = k_6$cluster
+  values(kmeans_raster4) = k_4$cluster
+  
+
+  plot(kmeans_raster)
+
+  plot(kmeans_raster6)  </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-13.png" width="672" /></p>
+<pre class="r"><code>  plot(kmeans_raster4)
+ 
+  
+   #5.3 
+  
+  floods_values = values(flood1)
+  k_12_values = values(kmeans_raster)
+  kmeans_table = table(floods_values, k_12_values)
+  
+  idx = which.max(kmeans_table)
+  
+  kmeans_raster[kmeans_raster != idx] = 0
+  
+  kmeans_stack = stack(flood1, flood2, flood3, flood4, flood5, kmeans_raster)
+  
+  plot(kmeans_stack)</code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-14.png" width="672" /><img src="Journal_files/figure-html/unnamed-chunk-4-15.png" width="672" /></p>
+<pre class="r"><code>  ##6
+  plot_sum = calc(kmeans_stack, fun = sum)
+  
+  floods_stats = cellStats(kmeans_stack, stat = sum)*res(kmeans_stack)^2/1e6
+  
+  kable(floods_stats, col.names = &quot;Area (m^2)&quot;)</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+Area (m^2)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+layer.1
+</td>
+<td style="text-align:right;">
+12.0528
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+layer.2
+</td>
+<td style="text-align:right;">
+12.9996
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+layer.3
+</td>
+<td style="text-align:right;">
+21.0438
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+layer.4
+</td>
+<td style="text-align:right;">
+15.0309
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+layer.5
+</td>
+<td style="text-align:right;">
+26.5401
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+NDVI
+</td>
+<td style="text-align:right;">
+191.2500
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>  plot(plot_sum, col = blues9)
+  
+  
+  plot_sum[plot_sum == 0] = NA
+  mapview(plot_sum)</code></pre>
+<div id="htmlwidget-f4dabfdc1751aeaa2719" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f4dabfdc1751aeaa2719">{"x":{"options":{"minZoom":1,"maxZoom":52,"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}},"preferCanvas":false,"bounceAtZoomLimits":false,"maxBounds":[[[-90,-370]],[[90,370]]]},"calls":[{"method":"addProviderTiles","args":["CartoDB.Positron","CartoDB.Positron","CartoDB.Positron",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["CartoDB.DarkMatter","CartoDB.DarkMatter","CartoDB.DarkMatter",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenStreetMap","OpenStreetMap","OpenStreetMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["Esri.WorldImagery","Esri.WorldImagery","Esri.WorldImagery",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addProviderTiles","args":["OpenTopoMap","OpenTopoMap","OpenTopoMap",{"errorTileUrl":"","noWrap":false,"detectRetina":false,"pane":"tilePane"}]},{"method":"addRasterImage","args":["data:image/png;base64,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",[[42.1570480311947,-91.9227825347839],[41.9811690198365,-91.6761560832228]],0.8,null,"plot_sum","plot_sum"]},{"method":"removeLayersControl","args":[]},{"method":"addLayersControl","args":[["CartoDB.Positron","CartoDB.DarkMatter","OpenStreetMap","Esri.WorldImagery","OpenTopoMap"],"plot_sum",{"collapsed":true,"autoZIndex":true,"position":"topleft"}]},{"method":"addControl","args":["","topright","imageValues-plot_sum","info legend "]},{"method":"addImageQuery","args":["plot_sum",[-91.9227825347839,41.9811690198365,-91.6761560832228,42.1570480311947],"mousemove",7,"Layer"]},{"method":"addLegend","args":[{"colors":["#040404 , #24123B 10%, #76106B 30%, #C53270 50%, #F47E2A 70%, #F9D361 90%, #FFFE9E "],"labels":["6","8","10","12","14"],"na_color":"#BEBEBE","na_label":"NA","opacity":1,"position":"topright","type":"numeric","title":"plot_sum","extra":{"p_1":0.1,"p_n":0.9},"layerId":null,"className":"info legend","group":"plot_sum"}]},{"method":"addScaleBar","args":[{"maxWidth":100,"metric":true,"imperial":true,"updateWhenIdle":true,"position":"bottomleft"}]},{"method":"addHomeButton","args":[-91.9268255913669,41.9710178408483,-91.6728481278367,42.1578687517408,"plot_sum","Zoom to plot_sum","<strong> plot_sum <\/strong>","bottomright"]}],"limits":{"lat":[41.9811690198365,42.1570480311947],"lng":[-91.9227825347839,-91.6761560832228]}},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n      function(el, x, data) {\n      // get the leaflet map\n      var map = this; //HTMLWidgets.find('#' + el.id);\n      // we need a new div element because we have to handle\n      // the mouseover output separately\n      // debugger;\n      function addElement () {\n      // generate new div Element\n      var newDiv = $(document.createElement('div'));\n      // append at end of leaflet htmlwidget container\n      $(el).append(newDiv);\n      //provide ID and style\n      newDiv.addClass('lnlt');\n      newDiv.css({\n      'position': 'relative',\n      'bottomleft':  '0px',\n      'background-color': 'rgba(255, 255, 255, 0.7)',\n      'box-shadow': '0 0 2px #bbb',\n      'background-clip': 'padding-box',\n      'margin': '0',\n      'padding-left': '5px',\n      'color': '#333',\n      'font': '9px/1.5 \"Helvetica Neue\", Arial, Helvetica, sans-serif',\n      'z-index': '700',\n      });\n      return newDiv;\n      }\n\n\n      // check for already existing lnlt class to not duplicate\n      var lnlt = $(el).find('.lnlt');\n\n      if(!lnlt.length) {\n      lnlt = addElement();\n\n      // grab the special div we generated in the beginning\n      // and put the mousmove output there\n\n      map.on('mousemove', function (e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                           ' lon: ' + (e.latlng.lng).toFixed(5) +\n                           ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                           ' | zoom: ' + map.getZoom() +\n                           ' | x: ' + L.CRS.EPSG3857.project(e.latlng).x.toFixed(0) +\n                           ' | y: ' + L.CRS.EPSG3857.project(e.latlng).y.toFixed(0) +\n                           ' | epsg: 3857 ' +\n                           ' | proj4: +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +no_defs ');\n      } else {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      }\n      });\n\n      // remove the lnlt div when mouse leaves map\n      map.on('mouseout', function (e) {\n      var strip = document.querySelector('.lnlt');\n      if( strip !==null) strip.remove();\n      });\n\n      };\n\n      //$(el).keypress(67, function(e) {\n      map.on('preclick', function(e) {\n      if (e.originalEvent.ctrlKey) {\n      if (document.querySelector('.lnlt') === null) lnlt = addElement();\n      lnlt.text(\n                      ' lon: ' + (e.latlng.lng).toFixed(5) +\n                      ' | lat: ' + (e.latlng.lat).toFixed(5) +\n                      ' | zoom: ' + map.getZoom() + ' ');\n      var txt = document.querySelector('.lnlt').textContent;\n      console.log(txt);\n      //txt.innerText.focus();\n      //txt.select();\n      setClipboardText('\"' + txt + '\"');\n      }\n      });\n\n      }\n      ).call(this.getMap(), el, x, data);\n}","data":null},{"code":"function(el, x, data) {\n  return (function(el,x,data){\n           var map = this;\n\n           map.on('keypress', function(e) {\n               console.log(e.originalEvent.code);\n               var key = e.originalEvent.code;\n               if (key === 'KeyE') {\n                   var bb = this.getBounds();\n                   var txt = JSON.stringify(bb);\n                   console.log(txt);\n\n                   setClipboardText('\\'' + txt + '\\'');\n               }\n           })\n        }).call(this.getMap(), el, x, data);\n}","data":null}]}}</script>
+<pre class="r"><code>  new_aoi1 = st_point(c(-91.78946, 42.06303)) %&gt;% 
+    st_sfc(crs = 4326) %&gt;% 
+    st_as_sf() %&gt;% 
+    st_transform(st_crs(kmeans_stack))
+  
+  new_aoi2 = st_point(c(-91.78482, 42.06245)) %&gt;% 
+    st_sfc(crs = 4326) %&gt;% 
+    st_as_sf() %&gt;% 
+    st_transform(st_crs(kmeans_stack))
+  
+  f_values = raster::extract(kmeans_stack, new_aoi1) 
+  f_values_plot = new_aoi1 %&gt;% 
+    mutate(f_values = f_values)  </code></pre>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-16.png" width="672" /></p>
 <p>And keep going. Try to solve the problems with different scripts that provide the same solution. Good luck, Happy coding.</p>
 </div>
 
@@ -436,6 +1940,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
