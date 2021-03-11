@@ -436,8 +436,6 @@ ggplot() +
 
 # Problem 3
 
-Write code that will place the numbers 1 to 100 separately into a variable using for loop. Then, again using the seq function.
-
 ```{r}
 library(tidyverse)
 library(sf)
@@ -859,22 +857,11 @@ meta = read_csv("~/Documents/github/176A-Lab01/data/palofloodscene.csv")
 ```
 ```{r cars}
 
-library(tidyverse)
-library(sf)       
-library(raster)   
-library(fasterize) 
-library(whitebox)  
-library(gifski)
-library(knitr)
 
 # Data libraries
 library(osmdata)   
 library(elevatr) 
-```
 
-
-## Question 1: Collecting Data
-```{r, warning=F, echo=F, message=F}
 library(tidyverse)
 library(sf)       
 library(raster)   
