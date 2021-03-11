@@ -27,7 +27,7 @@ raster
 getlandsat
 mapview
 whitebox
-fasterize
-gifski
 osmdata
 elevatr
+fasterize
+gifski

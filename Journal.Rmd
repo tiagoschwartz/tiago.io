@@ -163,9 +163,8 @@ ggplot(data = data3, aes(x = date)) +
 
 ```
 
-# Problem 2
+# Cities and Borders
 
-Put numbers into variables, do simple math on the variables
 
 ```{r}
 
@@ -434,7 +433,7 @@ ggplot() +
 
 ```
 
-# Problem 3
+# Tessallations
 
 ```{r}
 library(tidyverse)
@@ -648,6 +647,7 @@ plot_tess_pip(water_pip, "Water Supply") +
 plot_tess_pip(fish_wildlife_pip, "Fish and Wildlife") +
   gghighlight::gghighlight(n > mean(n) + 1) 
 ```
+# Palo Flood Landsat Bands
 
 ```{r}
 library(readr)
@@ -855,6 +855,8 @@ meta = read_csv("~/Documents/github/176A-Lab01/data/palofloodscene.csv")
   f_values_plot = new_aoi1 %>% 
     mutate(f_values = f_values)  
 ```
+# Santa Barbara Flood
+
 ```{r cars}
 
 
@@ -920,14 +922,18 @@ stream = osm$osm_lines %>%
   st_intersection(basin) %>% 
   st_transform(crs(basin))
 
+hillshade = raster("~/Documents/github/tiagoschwartz.io/Mission-Creek-Elev.tif")
 
+plot(hillshade, col = gray.colors(256, alpha = .5), main = "Hillshade Basin and Stream", legend = F, box = F)
+plot(stream, add = T, col = "blue")
+plot(basin, add = T)
 ```
 
-Code that would not work
+# Code that would not work because wbt_whiteshade couldn't create a hillshade file
 wbt_hillshade ( "~/Documents/github/tiagoschwartz.io/Mission-Creek-Elev.tif","~/Documents/github/tiagoschwartz.io/Mission-Creek-Hillshade.tif")
 
 
-hillshade = raster("~/Documents/github/tiagoschwartz.io/Mission-Creek-Hillshade.tif")
+hillshade = raster("~/Documents/github/tiagoschwartz.io/Mission-Creek-Elev.tif")
 
 plot(hillshade, col = gray.colors(256, alpha = .5), main = "Hillshade Basin and Stream", legend = F, box = F)
 plot(stream, add = T, col = "blue")

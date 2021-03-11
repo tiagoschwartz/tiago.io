@@ -372,10 +372,10 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="Journal.html">Journal</a>
+  <a href="Journal.html">Projects</a>
 </li>
 <li>
-  <a href="Links.html">Links</a>
+  <a href="Links.html">CV</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -754,9 +754,8 @@ ggplot(data = data3, aes(x = date)) +
   facet_grid(~areaname, scales = &quot;free_y&quot;)</code></pre>
 <p><img src="Journal_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
 </div>
-<div id="problem-2" class="section level1">
-<h1>Problem 2</h1>
-<p>Put numbers into variables, do simple math on the variables</p>
+<div id="cities-and-borders" class="section level1">
+<h1>Cities and Borders</h1>
 <pre class="r"><code>library(tidyverse)
 library(sf)
 library(units)
@@ -1335,9 +1334,8 @@ ggplot() +
   theme_economist() </code></pre>
 <p><img src="Journal_files/figure-html/unnamed-chunk-2-6.png" width="672" /></p>
 </div>
-<div id="problem-3" class="section level1">
-<h1>Problem 3</h1>
-<p>Write code that will place the numbers 1 to 100 separately into a variable using for loop. Then, again using the seq function.</p>
+<div id="tessallations" class="section level1">
+<h1>Tessallations</h1>
 <pre class="r"><code>library(tidyverse)
 library(sf)
 library(USAboundaries)
@@ -1658,7 +1656,7 @@ plot_tess_pip(flood_pip, &quot;Flood Control&quot;) +
 <pre class="r"><code># Fish and Wildlife
 plot_tess_pip(fish_wildlife_pip, &quot;Fish and Wildlife&quot;) +
   gghighlight::gghighlight(n &gt; mean(n) + 1) </code></pre>
-<p><img src="Journal_files/figure-html/unnamed-chunk-3-14.png" width="672" /></p>
+<p><img src="Journal_files/figure-html/unnamed-chunk-3-14.png" width="672" /> # Palo Flood Landsat Bands</p>
 <pre class="r"><code>library(readr)
 library(dplyr)
 library(raster) 
@@ -1918,8 +1916,96 @@ NDVI
   f_values = raster::extract(kmeans_stack, new_aoi1) 
   f_values_plot = new_aoi1 %&gt;% 
     mutate(f_values = f_values)  </code></pre>
-<p><img src="Journal_files/figure-html/unnamed-chunk-4-16.png" width="672" /></p>
-<p>And keep going. Try to solve the problems with different scripts that provide the same solution. Good luck, Happy coding.</p>
+<p><img src="Journal_files/figure-html/unnamed-chunk-4-16.png" width="672" /> # Santa Barbara Flood</p>
+<pre class="r"><code># Data libraries
+library(osmdata)   
+library(elevatr) 
+
+library(tidyverse)
+library(sf)       
+library(raster)   
+library(fasterize) 
+library(whitebox)  
+library(gifski)
+library(knitr)
+
+# Data libraries
+library(osmdata)   
+library(elevatr) 
+basin = read_sf(&quot;https://labs.waterdata.usgs.gov/api/nldi/linked-data/nwissite/USGS-11119750/basin&quot;)
+
+elev = elevatr::get_elev_raster(basin, z = 13) %&gt;% 
+  crop(basin) %&gt;% 
+  mask(basin)
+
+elev = elev * 3.281
+
+
+writeRaster(elev, &quot;~/Documents/github/tiagoschwartz.io/Mission-Creek-Elev.tif&quot;, overwrite = T)
+
+elev_raster = raster(&quot;~/Documents/github/tiagoschwartz.io/Mission-Creek-Elev.tif&quot;)
+
+
+bb = st_bbox(basin) %&gt;% 
+  st_as_sfc() %&gt;% 
+  st_transform(4326)
+
+build = osmdata::opq(bb) %&gt;% 
+  add_osm_feature(key = &quot;building&quot;) %&gt;% 
+  osmdata_sf()
+
+building_point = build$osm_polygons %&gt;% 
+  st_intersection(basin) %&gt;% 
+  st_transform(crs(basin)) %&gt;% 
+  st_centroid()
+
+building_poly = build$osm_polygons %&gt;% 
+  st_intersection(basin) %&gt;% 
+  st_transform(crs(basin))
+
+rail = opq(bb) %&gt;% 
+  add_osm_feature(key = &quot;railway&quot;, value = &quot;station&quot;) %&gt;% 
+  osmdata_sf()
+
+railway = rail$osm_points %&gt;% 
+  st_intersection(basin) %&gt;% 
+  st_transform(crs(basin))
+
+osm = opq(bb) %&gt;% 
+  add_osm_feature(key = &quot;waterway&quot;, value = &quot;stream&quot;) %&gt;% 
+  osmdata_sf()
+
+stream = osm$osm_lines %&gt;% 
+  st_intersection(basin) %&gt;% 
+  st_transform(crs(basin))
+
+hillshade = raster(&quot;~/Documents/github/tiagoschwartz.io/Mission-Creek-Elev.tif&quot;)
+
+plot(hillshade, col = gray.colors(256, alpha = .5), main = &quot;Hillshade Basin and Stream&quot;, legend = F, box = F)
+plot(stream, add = T, col = &quot;blue&quot;)
+plot(basin, add = T)</code></pre>
+<p><img src="Journal_files/figure-html/cars-1.png" width="672" /></p>
+</div>
+<div id="code-that-would-not-work-because-wbt_whiteshade-couldnt-create-a-hillshade-file" class="section level1">
+<h1>Code that would not work because wbt_whiteshade couldn’t create a hillshade file</h1>
+<p>wbt_hillshade ( “<sub>/Documents/github/tiagoschwartz.io/Mission-Creek-Elev.tif","</sub>/Documents/github/tiagoschwartz.io/Mission-Creek-Hillshade.tif”)</p>
+<p>hillshade = raster(“~/Documents/github/tiagoschwartz.io/Mission-Creek-Elev.tif”)</p>
+<p>plot(hillshade, col = gray.colors(256, alpha = .5), main = “Hillshade Basin and Stream”, legend = F, box = F) plot(stream, add = T, col = “blue”) plot(basin, add = T)</p>
+<p>stream_buffer = stream %&gt;% st_transform(5070) %&gt;% st_buffer(10) %&gt;% st_transform(4326)</p>
+<p>stream_raster = fasterize::fasterize(stream_buffer, elev_raster)</p>
+<p>writeRaster(stream_raster, “~/Documents/github/tiagoschwartz.io/stream-raster.tif”, overwrite = T)</p>
+<p>wbt_breach_depressions(“~/Documents/github/tiagoschwartz.io/Mission-Creek-Elev.tif”, “~/Documents/github/tiagoschwartz.io/breach-depressions.tif”)</p>
+<p>wbt_elevation_above_stream(“~/Documents/github/tiagoschwartz.io/breach-depressions.tif”, “~/Documents/github/tiagoschwartz.io/stream-raster.tif”, “~/Documents/github/tiagoschwartz.io/hand-raster.tif”)</p>
+<p>hand_rast = raster(“~/Documents/github/tiagoschwartz.io/hand-raster.tif”) flood_raster = raster(“~/Documents/github/tiagoschwartz.io/stream-raster.tif”)</p>
+<p>offset_raster = hand_rast + 3.69</p>
+<p>offset_raster[flood_raster == 1] = 0</p>
+<p>writeRaster(offset_raster, “.~/Documents/github/tiagoschwartz.io/offset_basin.tif”, overwrite = T)</p>
+<p>offset_raster = raster(“~/Documents/github/tiagoschwartz.io/offset_basin.tif”)</p>
+<p>offsetraster1 = offset_raster</p>
+<p>offset_raster[offset_raster &gt; 10.02] = NA</p>
+<p>plot(hillshade, col = gray.colors(256, alpha = .5), main = “Hillshade Basin and Flood”, legend = F, box =F) plot(offset_raster, add = T, col = rev(blues9), legend = F) plot(basin, add = T) plot(railway, col = “green”, cex = 1, pch = 16, add = T)</p>
+<p>building_points = ifelse(!is.na(raster::extract(offset_raster, building_point)), “red”, “black”)</p>
+<p>plot(hillshade, col = gray.colors(256, alpha = .5), main = paste(“2017 Mission Creek Basin Flood Affected”, sum(building_points == “red”), “Buildings”), legend = F, box =F) plot(offset_raster, add = T, col = rev(blues9), legend = F, box = F) plot(basin, add = T) plot(railway, col = “green”, cex = 1, pch = 16, add = T, box = F) plot(building_point, add = T, col = building_points, cex = .08, pch = 16)</p>
 </div>
 
 
